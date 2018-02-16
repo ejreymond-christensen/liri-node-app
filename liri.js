@@ -12,8 +12,6 @@ var client = new Twitter(keys.twitter);
 var command = process.argv[2];
 var nodeRawData = process.argv;
 
-var movieQuery = "";
-
 /* ====== functions to run the API's ====== */
 
 //The Twitter API
@@ -63,14 +61,16 @@ var spotification = function(query) {
 
 //Formats the movieQuery var to match OMBD's requirements
 var movie = function(nodeRawData) {
-  console.log(process.argv[3]);
-  for (var i = 3; i < nodeRawData.length; i++) {
-    if (nodeRawData[3] === "" || nodeRawData[3] === undefined) {
-      movieQuery = "Mr. Nobody";
-    } else if (i > 3 && i < nodeRawData.length) {
-      movieQuery = movieQuery + "+" + nodeRawData[i];
-    } else {
-      movieQuery += nodeRawData[i];
+  var movieQuery = "";
+  if (nodeRawData[3] === undefined || nodeRawData[3] === "") {
+    movieQuery = "Mr. Nobody";
+  } else {
+    for (var i = 3; i < nodeRawData.length; i++) {
+      if (i > 3 && i < nodeRawData.length) {
+        movieQuery = movieQuery + "+" + nodeRawData[i];
+      } else {
+        movieQuery += nodeRawData[i];
+      }
     }
   }
   movieRequest(movieQuery);
@@ -90,6 +90,8 @@ var movieRequest = function(movieQuery) {
   });
 };
 
+
+//Do-what function
 var doWhat = function() {
   fs.readFile("random.txt", "utf8", function(error, data) {
     var twitterData = data.trim();
